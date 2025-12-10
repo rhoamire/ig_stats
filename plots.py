@@ -48,3 +48,37 @@ def plot_heatmap(heat_df):
     fig.colorbar(im, ax=ax, label="Messages")
     fig.tight_layout()
     return fig
+
+def plot_top_reel_spammers(spammers_df, mode="me", top_n=15):
+    if spammers_df.empty:
+        return None
+    df = spammers_df.copy()
+    if mode == "me":
+        df = df.sort_values("balance", ascending=False).head(top_n)
+        title = "Conversations where I send more reels"
+        values = df["balance"]
+    else:
+        df = df.sort_values("balance").head(top_n)
+        title = "Conversations where they send more reels"
+        values = df["balance"] * -1  # positive bar length
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.barh(df.index, values)
+    ax.invert_yaxis()
+    ax.set_xlabel("Reel difference (me - them)")
+    ax.set_title(title)
+    fig.tight_layout()
+    return fig
+
+
+def plot_attachment_share(per_conv_df, top_n=15):
+    if per_conv_df.empty:
+        return None
+    df = per_conv_df.sort_values("any_attachment_share", ascending=False).head(top_n)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.barh(df.index, df["any_attachment_share"])
+    ax.invert_yaxis()
+    ax.set_xlabel("Share of messages that are attachments")
+    ax.set_title("Most attachment-heavy conversations")
+    fig.tight_layout()
+    return fig

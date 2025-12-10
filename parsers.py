@@ -2,7 +2,8 @@ import re
 from datetime import datetime
 from dateutil.parser import parse as parse_dt
 from bs4 import BeautifulSoup
-from config import DIV_SELECTOR, MY_NAME, SPECIAL_MAP
+from config import DIV_SELECTOR, SPECIAL_MAP
+from identity import MY_NAME
 
 
 def clean_username(name):
@@ -46,7 +47,30 @@ def extract_messages_from_html(html, raw_conv_name):
         sender = extract_sender(msg_div)
         text = extract_text(msg_div)
         ts = extract_timestamp(msg_div)
+
+        has_reel = False
+        for a in msg_div.find_all("a", href=True):
+            href = a["href"] or ""
+            if "instagram.com/reel/" in href:
+                has_reel = True
+                break
+
+        has_image = msg_div.find("img") is not None
+
+        lower_text = (text or "").lower()
+        attachment_text_only = "sent an attachment" in lower_text
+
+        if has_reel:
+            message_type = "reel"
+        elif has_image:
+            message_type = "image"
+        elif attachment_text_only:
+            message_type = "attachment_text_only"
+        else:
+            message_type = "text"
+
         direction = "me" if sender == MY_NAME else "them"
+
         rows.append(
             {
                 "conversation": conv_name,
@@ -55,6 +79,10 @@ def extract_messages_from_html(html, raw_conv_name):
                 "direction": direction,
                 "text": text,
                 "timestamp": ts,
+                "message_type": message_type,
+                "has_reel": has_reel,
+                "has_image": has_image,
+                "attachment_text_only": attachment_text_only,
             }
         )
     return rows

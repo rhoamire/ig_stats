@@ -1,9 +1,29 @@
-BASE_DIR = r"C:/Users/somya/Downloads/instagram-some.to.one-2025-12-10-QcdWDKTj/your_instagram_activity/messages/inbox"
-DIV_SELECTOR = "div.pam._3-95._2ph-._a6-g.uiBoxWhite.noborder"
+import os
 
-MY_NAME = "Somya Sharma"
-TIME_SHIFT_HOURS = 13.5
+EXPORT_ROOT = r"D:/instagram-some.to.one-2025-12-10-nebyAnA5"
 
 SPECIAL_MAP = {
-    "749124079818075": "Charvi"
+    "749124079818075": "Charvi",
 }
+
+AUTO_LOCAL_TIME = True
+
+DIV_SELECTOR = "div.pam._3-95._2ph-._a6-g.uiBoxWhite.noborder"
+
+
+def resolve_paths(export_root: str):
+    export_root = os.path.abspath(export_root)
+    your_ig_activity = os.path.join(export_root, "your_instagram_activity")
+    inbox_dir = os.path.join(your_ig_activity, "messages", "inbox")
+    personal_info_json = os.path.join(
+        export_root,
+        "personal_information",
+        "personal_information",
+        "personal_information.json",
+    )
+    return {
+        "EXPORT_ROOT": export_root,
+        "YOUR_IG_ACTIVITY": your_ig_activity,
+        "INBOX_DIR": inbox_dir,
+        "PERSONAL_INFO_JSON": personal_info_json,
+    }
