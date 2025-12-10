@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.env/
+.venv/
+venv/
+ENV/
+
+# Streamlit cache
+.streamlit/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local data DO NOT UPLOAD YOUR IG DATA
+your_instagram_activity/
