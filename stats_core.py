@@ -14,8 +14,11 @@ def most_active_day(df: pd.DataFrame):
 
 def user_span(df: pd.DataFrame):
     span = df.groupby("conversation")["timestamp"].agg(["min", "max"])
-    span["duration_days"] = (span["max"] - span["min"]).dt.days + 1
+    span = span.rename(columns={"min": "first_message", "max": "last_message"})
+    span["duration_days"] = (span["last_message"] - span["first_message"]).dt.days + 1
     return span
+
+
 
 def messages_per_user(df: pd.DataFrame):
     return df.groupby("conversation").size().rename("total_msgs")
