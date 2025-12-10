@@ -4,6 +4,7 @@ EXPORT_ROOT = r"D:/instagram-some.to.one-2025-12-10-nebyAnA5"
 
 SPECIAL_MAP = {
     "749124079818075": "Charvi",
+    "17976709496683018": "Charvi",
 }
 
 AUTO_LOCAL_TIME = True
